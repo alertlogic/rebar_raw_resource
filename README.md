@@ -32,6 +32,12 @@ The following addition to `rebar.config` makes the plugin available for use with
 ]}.
 ```
 
+This plugin is also available on [hex][hex], so this ought to work:
+
+```
+{plugins, [ rebar_raw_resource ] }.
+```
+
 ### Add Raw Dependencies
 
 The `raw` resource type is simply a wrapper around another type, so the basic structure of a raw dependency is:
@@ -95,7 +101,7 @@ If the dependency is going to be included in your project as an OTP application,
 
 ## Caveats
 
-###Scope of Dependency Names and Locations
+### Scope of Dependency Names and Locations
 
 At present, I don't discriminate between scopes, assuming a given dependency location always maps to the same name.
 Including the dependency's version selector and profile would allow complete uniqueness of mappings, but subsequent operations may alter the version selector, resulting in matches not being found.
@@ -129,4 +135,5 @@ Everything here is covered by this [license][license].
   [rebar3]:     https://www.rebar3.org
   [rebar3cfg]:  https://www.rebar3.org/docs/configuration
   [rebar3src]:  https://github.com/erlang/rebar3
+  [hex]:        https://hex.pm/packages/rebar_raw_resource
 
