@@ -22,17 +22,7 @@ _You'll find some information in the [rebar3 configuration][rebar3cfg] documenta
 
 ### Add The Plugin
 
-The following addition to `rebar.config` makes the plugin available for use with your dependencies:
-
-```erlang
-{plugins, [
-    {rebar_raw_resource,
-        {git, "git://github.com/basho/rebar_raw_resource.git",
-        {branch, "master"}}}
-]}.
-```
-
-This plugin is also available on [hex][hex], so this ought to work:
+The following addition to `rebar.config` makes the plugin available for use with your dependencies. Since it is available on [hex][hex], this ought to work:
 
 ```
 {plugins, [ rebar_raw_resource ] }.
