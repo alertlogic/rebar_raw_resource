@@ -22,14 +22,10 @@ _You'll find some information in the [rebar3 configuration][rebar3cfg] documenta
 
 ### Add The Plugin
 
-The following addition to `rebar.config` makes the plugin available for use with your dependencies:
+The following addition to `rebar.config` makes the plugin available for use with your dependencies. Since it is available on [hex][hex], this ought to work:
 
-```erlang
-{plugins, [
-    {rebar_raw_resource,
-        {git, "git://github.com/basho/rebar_raw_resource.git",
-        {branch, "master"}}}
-]}.
+```
+{plugins, [ rebar_raw_resource ] }.
 ```
 
 ### Add Raw Dependencies
@@ -95,7 +91,7 @@ If the dependency is going to be included in your project as an OTP application,
 
 ## Caveats
 
-###Scope of Dependency Names and Locations
+### Scope of Dependency Names and Locations
 
 At present, I don't discriminate between scopes, assuming a given dependency location always maps to the same name.
 Including the dependency's version selector and profile would allow complete uniqueness of mappings, but subsequent operations may alter the version selector, resulting in matches not being found.
@@ -129,4 +125,5 @@ Everything here is covered by this [license][license].
   [rebar3]:     https://www.rebar3.org
   [rebar3cfg]:  https://www.rebar3.org/docs/configuration
   [rebar3src]:  https://github.com/erlang/rebar3
+  [hex]:        https://hex.pm/packages/rebar_raw_resource
 
