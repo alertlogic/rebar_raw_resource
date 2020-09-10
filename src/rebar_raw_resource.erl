@@ -293,6 +293,8 @@ download(Dest, {?RTYPE, Spec, Opts}, State) ->
 download(Dest, AppInfo0, ResourceState, RebarState) ->
     Name = term_to_atom(rebar_app_info:name(AppInfo0)),
     {Spec, Opts} = case rebar_app_info:source(AppInfo0) of
+        {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref, opt = Opts0}, SubLoc0} ->
+            {{Res0, Loc0, Ref, SubLoc0}, Opts0};
         {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref, opt = Opts0}} ->
             {{Res0, Loc0, Ref}, Opts0};
         {?RTYPE, S, O} ->
@@ -435,10 +437,10 @@ make_vsn(Path) ->
 %
 make_vsn(AppInfo0, _ResourceState) ->
     Spec = case rebar_app_info:source(AppInfo0) of
-               {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref}, SubLoc} -> {Res0, Loc0, Ref, SubLoc};
-               {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref}} -> {Res0, Loc0, Ref};
-               {?RTYPE, S, _} -> S;
-               {?RTYPE, S} -> S
+        {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref}, SubLoc} -> {Res0, Loc0, Ref, SubLoc};
+        {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref}} -> {Res0, Loc0, Ref};
+        {?RTYPE, S, _} -> S;
+        {?RTYPE, S} -> S
     end,
     {Res, _Loc} = parse_ext_spec(Spec),
     #mod_res{mod = Mod} = lookup_res(mod_data(), Res),
