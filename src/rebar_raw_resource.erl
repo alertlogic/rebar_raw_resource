@@ -293,6 +293,8 @@ download(Dest, {?RTYPE, Spec, Opts}, State) ->
 download(Dest, AppInfo0, ResourceState, RebarState) ->
     Name = term_to_atom(rebar_app_info:name(AppInfo0)),
     {Spec, Opts} = case rebar_app_info:source(AppInfo0) of
+        {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref, opt = Opts0}, SubLoc0} ->
+            {{Res0, Loc0, Ref, SubLoc0}, Opts0};
         {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref, opt = Opts0}} ->
             {{Res0, Loc0, Ref}, Opts0};
         {?RTYPE, S, O} ->
@@ -350,6 +352,8 @@ lock(Path, {?RTYPE, Spec, Opts}) ->
 %% rebar_resource_v2 format
 lock(AppInfo, _ResourceState) ->
     {Spec, Opts} = case rebar_app_info:source(AppInfo) of
+        {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref0, opt = Opts0}, SubLoc0} ->
+            {{Res0, Loc0, Ref0, SubLoc0}, Opts0};
         {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref0, opt = Opts0}} ->
             {{Res0, Loc0, Ref0}, Opts0};
         {?RTYPE, S, O} -> {S, O};
@@ -357,8 +361,12 @@ lock(AppInfo, _ResourceState) ->
     end,
     {Res, _Loc} = parse_ext_spec(Spec),
     #mod_res{mod = Mod} = lookup_res(mod_data(), Res),
-    {Res, Loc, Ref} = Mod:lock(rebar_app_info:source(AppInfo, Spec), []),
-    {?RTYPE, Loc, #mod_ref{res = Res, ref = Ref, opt = Opts}}.
+    case Mod:lock(rebar_app_info:source(AppInfo, Spec), []) of
+        {Res, Loc, Ref, SubLoc} -> {?RTYPE, Loc, #mod_ref{res = Res, ref = Ref, opt = Opts}, SubLoc};
+        {Res, Loc, Ref} -> {?RTYPE, Loc, #mod_ref{res = Res, ref = Ref, opt = Opts}}
+    end.
+
+    
 
 -spec needs_update(Path :: rsrc_dir(),
                    SpecOrResourceState :: this_spec())
@@ -389,6 +397,9 @@ needs_update(Path, {?RTYPE, Spec}) ->
 %% rebar_resource_v2 format
 needs_update(AppInfo, State) ->
     {Mod, SourceSpec} = case rebar_app_info:source(AppInfo) of
+        {?RTYPE, Loc, #mod_ref{res = Res, ref = Ref}, SubLoc} ->
+            #mod_res{mod = M} = lookup_res(mod_data(), Res),
+            {M, {Res, Loc, Ref, SubLoc}};
         {?RTYPE, Loc, #mod_ref{res = Res, ref = Ref}} ->
             #mod_res{mod = M} = lookup_res(mod_data(), Res),
             {M, {Res, Loc, Ref}};
@@ -426,6 +437,7 @@ make_vsn(Path) ->
 %
 make_vsn(AppInfo0, _ResourceState) ->
     Spec = case rebar_app_info:source(AppInfo0) of
+        {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref}, SubLoc} -> {Res0, Loc0, Ref, SubLoc};
         {?RTYPE, Loc0, #mod_ref{res = Res0, ref = Ref}} -> {Res0, Loc0, Ref};
         {?RTYPE, S, _} -> S;
         {?RTYPE, S} -> S
