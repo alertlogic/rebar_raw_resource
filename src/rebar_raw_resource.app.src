@@ -27,6 +27,5 @@
     {registered,    []},
     {applications,  [kernel, stdlib]},
     {licenses, ["Apache License 2.0"]},
-    {links, [{"Github", "https://github.com/alertlogic/rebar_raw_resource"}]},
-    {maintainers, []}
+    {links, [{"Github", "https://github.com/alertlogic/rebar_raw_resource"}]}
 ]}.
