@@ -611,7 +611,7 @@ ensure_app(Path, Mod, Name, Opts, Result) ->
                 "%%\n"
                 % this is the minimum set of elements required to make rebar
                 % happy when there are no sources for it to compile
-                "{application,   ~s,\n"
+                "{application,   \'~s\',\n"
                 "[\n"
                 "    {description,   \"~s\"},\n"
                 "    {vsn,           \"~s\"},\n"
