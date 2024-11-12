@@ -51,7 +51,6 @@
 % For development only - you *really* don't want this defined!
 %-define(RRR_DEBUG,  true).
 
--define(else,   'true').
 -define(is_min_tuple(Var, Min),
     erlang:is_tuple(Var) andalso erlang:tuple_size(Var) >= Min).
 -define(is_rec_type(Var, Type, Min),
